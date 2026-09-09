@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure Asset Advisory | Next-Gen Lifecycle Modelling</title>
+    
+    <!-- Modern Tech Fonts: Poppins for headings, Inter for readable body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Vibrant Tech Variables */
+        :root {
+            --bg-main: #ffffff;
+            --bg-alt: #f0fdfa; /* Very light teal/mint for alternate sections */
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --gradient-primary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            --gradient-secondary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --accent-cyan: #06b6d4;
+            --card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+            --card-hover-shadow: 0 30px 60px -12px rgba(6, 182, 212, 0.2);
+        }
+
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            color: var(--text-muted); 
+            line-height: 1.8; 
+            background-color: var(--bg-main);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 { 
+            font-family: 'Poppins', sans-serif; 
+            color: var(--text-dark); 
+            margin-top: 0; 
+            line-height: 1.2;
+        }
+        
+        p { margin-bottom: 24px; font-size: 1.1rem; }
+        img { max-width: 100%; height: auto; border-radius: 16px; }
+        
+        /* Glassmorphism Navigation */
+        header { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 20px 0; 
+            position: fixed; 
+            width: 100%;
+            top: 0; 
+            z-index: 1000; 
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; }
+        .logo { font-size: 24px; font-weight: 800; font-family: 'Poppins', sans-serif; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links a { 
+            color: var(--text-dark); 
+            text-decoration: none; 
+            margin-left: 35px; 
+            font-weight: 600; 
+            font-size: 0.95rem;
+            transition: color 0.3s ease; 
+        }
+        .nav-links a:hover { color: var(--accent-cyan); }
+
+        /* Vibrant Hero Section */
+        .hero { 
+            /* Using a vibrant gradient overlay on top of an abstract tech image */
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.92) 0%, rgba(59, 130, 246, 0.92) 100%), url('https://placehold.co/1920x1080/0f172a/FFF?text=Abstract+Data+Grid') no-repeat center center/cover; 
+            padding: 200px 20px 140px 20px; 
+            text-align: center; 
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); /* Cool diagonal cut at the bottom */
+        }
+        .hero-inner { max-width: 900px; margin: 0 auto; }
+        .hero h1 { font-size: 4.5rem; margin-bottom: 24px; color: #ffffff; font-weight: 800; letter-spacing: -1px; }
+        .hero h2 { font-size: 1.4rem; color: rgba(255,255,255,0.9); font-weight: 400; margin-bottom: 50px; font-family: 'Inter', sans-serif; }
+        
+        /* Pill Buttons */
+        .btn { 
+            display: inline-block; 
+            background: #ffffff; 
+            color: var(--accent-cyan); 
+            padding: 16px 40px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            border-radius: 50px; /* Full pill shape */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+        }
+        .btn:hover { 
+            transform: translateY(-4px) scale(1.02); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15); 
+        }
+
+        /* General Layout */
+        section { padding: 120px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 3rem; margin-bottom: 20px; }
+        
+        /* Gradient Text Utility */
+        .text-gradient {
+            background: var(--gradient-primary); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle { text-align: center; max-width: 700px; margin: 0 auto 70px auto; font-size: 1.2rem; }
+        .bg-alt { background: var(--bg-alt); }
+
+        /* Animation Classes */
+        .animate-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .animate-up.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* About Us - Redesigned Grid */
+        .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: center; }
+        .about-image { position: relative; }
+        .about-image img { width: 100%; box-shadow: var(--card-shadow); }
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            bottom: 20px;
+            left: 20px;
+            border: 3px solid var(--accent-cyan);
+            border-radius: 16px;
+            z-index: -1;
+        }
+        
+        /* Tech Stack Pills */
+        .tech-stack { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .tech-pill { 
+            background: var(--bg-alt); 
+            color: var(--accent-cyan); 
+            padding: 8px 20px; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            font-size: 0.9rem;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; } }
+
+        /* Modern Card Grids */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .card { 
+            background: #ffffff; 
+            padding: 50px 40px; 
+            border-radius: 24px; 
+            box-shadow: var(--card-shadow); 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .card:hover { transform: translateY(-15px); box-shadow: var(--card-hover-shadow); }
+        .card:hover::before { transform: scaleX(1); }
+        .card img { margin: -50px -40px 30px -40px; width: calc(100% + 80px); height: 220px; object-fit: cover; border-radius: 24px 24px 0 0; }
+        .card h3 { font-size: 1.6rem; margin-bottom: 15px; }
+
+        /* Minimalist Contact Form */
+        .contact-container { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            background: #ffffff; 
+            padding: 60px; 
+            border-radius: 24px; 
+            box-shadow: var(--card-shadow); 
+        }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-dark); font-size: 0.95rem; }
+        .form-group input, .form-group textarea { 
+            width: 100%; 
+            padding: 16px 20px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-family: inherit; 
+            font-size: 1rem; 
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+        }
+        .form-group input:focus, .form-group textarea:focus { 
+            outline: none; 
+            border-color: var(--accent-cyan); 
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
+        }
+        .form-group textarea { resize: vertical; height: 140px; }
+        .btn-submit { 
+            background: var(--gradient-primary); 
+            color: #ffffff; 
+            border: none; 
+            padding: 18px 30px; 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.2);
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(6, 182, 212, 0.3); }
+        .hidden { display: none !important; }
+
+        /* Client Logos Section */
+        .client-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px; }
+        .client-pill { 
+            background: #ffffff; 
+            padding: 15px 30px; 
+            border-radius: 50px; 
+            font-weight: 700; 
+            color: var(--text-dark); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+        }
+
+        /* Footer */
+        footer { background: var(--text-dark); color: #94a3b8; text-align: center; padding: 50px 20px; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">InfraAA.co.uk</div>
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#sectors">Sectors</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-inner animate-up">
+            <h1>Asset Lifecycle Modelling</h1>
+            <h2>We transform engineering metrics into data-driven business rules for critical infrastructure portfolios.</h2>
+            <a href="#contact" class="btn">Start a Project</a>
+        </div>
+    </section>
+
+    <section id="about" class="container">
+        <div class="about-grid">
+            <div class="animate-up">
+                <h2 class="section-title" style="text-align: left;">Bridging the gap between <span class="text-gradient">Engineering & Data.</span></h2>
+                <p>Infrastructure Asset Advisory is a specialist consultancy that builds robust decision-support tools from first principles. With over 14 years of subject matter expertise, we act as independent advisors and technical leads on national-scale modelling projects.</p>
+                <p>We cleanse and analyse vast historical datasets to produce reliable probability driven decisions, delivering CAPEX and OPEX forecasting capabilities for your future funding periods.</p>
+                
+                <div class="tech-stack">
+                    <div class="tech-pill">Python</div>
+                    <div class="tech-pill">SQL</div>
+                    <div class="tech-pill">VBA</div>
+                    <div class="tech-pill">Predictive Analytics</div>
+                    <div class="tech-pill">RAMS</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="services" class="bg-alt">
+        <div class="container">
+            <h2 class="section-title animate-up">Core <span class="text-gradient">Capabilities</span></h2>
+            <p class="section-subtitle animate-up">Translating complex datasets into actionable operational strategies.</p>
+            
+            <div class="grid-3">
+                <div class="card animate-up">
+                    <h3>Lifecycle Modelling</h3>
+                    <p>We design and implement predictive asset degradation models to optimise long-term maintenance and renewal planning, ensuring maximum return on capital investment.</p>
+                </div>
+                <div class="card animate-up">
+                    <h3>RAMS Studies</h3>
+                    <p>Comprehensive Reliability, Availability and Maintainability studies. We develop sophisticated RAM asset models to calculate MTBF and MTTR, directly informing CAPEX decisions.</p>
+                </div>
+                <div class="card animate-up">
+                    <h3>Decision Support Tools</h3>
+                    <p>We build bespoke software, algorithms, and data visualisation tools that process large datasets to output actionable performance metrics and objective asset rankings.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sectors" class="container">
+        <h2 class="section-title animate-up">Industry <span class="text-gradient">Expertise</span></h2>
+        
+        <div class="grid-3">
+            <div class="card animate-up">
+                <img src="https://placehold.co/600x400/e0f2fe/0369a1?text=Railway+Infrastructure" alt="Railway Track and Tunnels">
+                <h3>Railway Infrastructure</h3>
+                <p>Delivering national-scale modelling for track, tunnels, and earthworks. We have built predictive degradation models ageing asset portfolios and developed award-winning instability algorithms.</p>
+            </div>
+            <div class="card animate-up">
+                <img src="https://placehold.co/600x400/e0f2fe/0369a1?text=Energy+&+Offshore" alt="Energy">
+                <h3>Energy & Offshore</h3>
+                <p>Extensive production and operational availability studies for complex assets, including advanced RAM modelling for FPSOs, subsea tiebacks, and international LNG facilities.</p>
+            </div>
+            <div class="card animate-up">
+                <img src="https://placehold.co/600x400/e0f2fe/0369a1?text=Highways+&+Utilities" alt="Utilities">
+                <h3>Highways & Utilities</h3>
+                <p>Developing RAM models for major water treatment works, and utilising machine learning and geospatial data to develop proactive road safety tools identifying high-risk locations.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="bg-alt">
+        <div class="container">
+            <h2 class="section-title animate-up">Let's <span class="text-gradient">Connect</span></h2>
+            <p class="section-subtitle animate-up">Discuss your infrastructure challenges directly with our technical lead.</p>
+            
+            <div class="contact-container animate-up">
+                <!-- Form powered securely by Web3Forms -->
+                <form action="https://api.web3forms.com/submit" method="POST">
+                    
+                    <!-- Web3Forms Access Key integrated here -->
+                    <input type="hidden" name="access_key" value="49c84250-4616-4622-883d-bc85e928c9c0">
+                    <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+                    
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Jane Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Business Email</label>
+                        <input type="email" id="email" name="email" required placeholder="jane@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Project Requirements</label>
+                        <textarea id="message" name="message" required placeholder="Tell us about your modelling or RAMS requirements..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Submit Enquiry</button>
+                </form>
+            </div>
+
+            <!-- Trusted Clients -->
+            <div class="client-list animate-up" style="margin-top: 80px;">
+                <div class="client-pill">Network Rail</div>
+                <div class="client-pill">MODEC</div>
+                <div class="client-pill">Tullow Oil</div>
+                <div class="client-pill">Transport for London</div>
+                <div class="client-pill">United Utilities</div>
+                <div class="client-pill">BHP Billiton</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Infrastructure Asset Advisory Ltd. All rights reserved.</p>
+    </footer>
+
+    <!-- Script for smooth scroll fade-in animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.animate-up');
+            animatedElements.forEach(el => observer.observe(el));
+        });
+    </script>
+
+</body>
+</html>
